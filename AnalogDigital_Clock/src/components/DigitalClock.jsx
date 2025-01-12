@@ -13,10 +13,10 @@ const DigitalClock = () => {
     return time < 10 ? `0${time}` : time; // Add leading zero
   };
 
-  const hours = formatTime(time.getHours());
+  const hours = formatTime(time.getHours()%12);
   const minutes = formatTime(time.getMinutes());
   const seconds = formatTime(time.getSeconds());
-  const amPm = hours >= 12 ? 'PM' : 'AM';
+  const amPm = hours >= 12 ? 'AM' : 'PM';
 
   return (
     <div className="digital-clock">
