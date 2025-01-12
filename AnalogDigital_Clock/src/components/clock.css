@@ -1,74 +1,66 @@
 .clock {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background: #f4f4f4; /* Background color */
-  }
-  
-  .clock-face {
-    position: relative;
-    width: 250px; /* Clock size */
-    height: 250px;
-    border: 5px solid #333;
-    border-radius: 50%;
-    background: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .number {
-    position: absolute;
-    width: 55px;
-    height: 55px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    font-size: 16px;
-    font-weight: bold;
-    color: #333;
-    transform-origin: center;
-  }
-  
-  .hand {
-    position: absolute;
-    bottom: 50%; /* Start hands from the center */
-    left: 50%;
-    transform-origin: bottom; /* Rotate from the bottom of the hand */
-    transform: translate(-50%, 0) rotate(90deg); /* Default rotation */
-    transition: transform 0.05s ease-in-out;
-  }
-  
-  .hour-hand {
-    width: 6px;
-    height: 60px;
-    background: #000;
-    border-radius: 3px;
-  }
-  
-  .minute-hand {
-    width: 4px;
-    height: 90px;
-    background: #666;
-    border-radius: 2px;
-  }
-  
-  .second-hand {
-    width: 2px;
-    height: 100px;
-    background: red;
-  }
-  
-  .center-dot {
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    background: #000;
-    border-radius: 50%;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f4f4f4;
+}
+
+.clock-face {
+  position: relative;
+  width: 250px;
+  height: 250px;
+  border: 5px solid #333;
+  border-radius: 50%;
+  background: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.number {
+  position: absolute;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+}
+
+.hand {
+  position: absolute;
+  bottom: 50%;
+  left: 50%;
+  transform-origin: bottom;
+  transform: translate(-50%, 0);
+  transition: transform 0.05s ease-in-out;
+}
+
+.hour-hand {
+  width: 6px;
+  height: 60px;
+  background: #000;
+  border-radius: 3px;
+}
+
+.minute-hand {
+  width: 4px;
+  height: 90px;
+  background: #666;
+  border-radius: 2px;
+}
+
+.second-hand {
+  width: 2px;
+  height: 100px;
+  background: red;
+}
+
+.center-dot {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #000;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

@@ -9,13 +9,14 @@ const Clock = () => {
       setTime(new Date());
     }, 1000);
 
-    return () => clearInterval(interval);
+    return () => clearInterval(interval); // Cleanup interval on component unmount
   }, []);
 
   const seconds = time.getSeconds();
   const minutes = time.getMinutes();
   const hours = time.getHours();
 
+  // Calculate rotation for each hand
   const secondHandStyle = {
     transform: `rotate(${seconds * 6}deg)`,
   };
@@ -25,7 +26,7 @@ const Clock = () => {
   };
 
   const hourHandStyle = {
-    transform: `rotate(${hours * 30 + minutes * 0.5}deg)`,
+    transform: `rotate(${(hours % 12) * 30 + minutes * 0.5}deg)`,
   };
 
   // Create clock numbers dynamically
@@ -34,11 +35,15 @@ const Clock = () => {
   return (
     <div className="clock">
       <div className="clock-face">
-        {numbers.map((num) => {
-          const angle = num * 30; // Each number is 30 degrees apart
+        {numbers.map((num, index) => {
+          // Fix angle calculation to make numbers anti-clockwise
+          const angle =270 + (index + 1)*30; // 30 degrees per number
+          
+          // Anti-clockwise adjustment: Starting from 12 at top (0 degrees)
           const style = {
-            transform: `rotate(${angle}deg) translate(100px) rotate(-${angle}deg)`,
+            transform: `rotate(${angle}deg) translate(110px) rotate(-${angle}deg)`, 
           };
+
           return (
             <div key={num} className="number" style={style}>
               {num}
