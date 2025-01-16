@@ -87,7 +87,7 @@ src/
 │   ├── Analog.jsx
 │   ├── clock.css
 │   ├── DigitalClock.jsx
-│   └── gigital.css
+│   └── digital.css
 ├── App.js
 ├── index.js
 └── ...
@@ -95,7 +95,13 @@ src/
 
 ---
 
-## How It Works
+### How to Run
+
+ Start the development server.
+
+ bun run dev
+
+ Open your browser and navigate to `http://localhost:3000` to view the clocks.
 
 ### Analog Clock
 
