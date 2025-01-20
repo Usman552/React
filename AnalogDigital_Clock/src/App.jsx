@@ -1,49 +1,60 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes, useNavigate, useSearchParams } from 'react-router-dom';
 import AnalogClock from './components/Analog';
 import DigitalClock from './components/DigitalClock';
 import './App.css';
 
 function App() {
-  const [isAnalog, setIsAnalog] = useState(true);
-  const [timezone, setTimezone] = useState('UTC'); // Default timezone is UTC
+  const localTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone; // Get user's local timezone
+
+  const [isAnalog, setIsAnalog] = useState(true); // Default clock type
+  const [timezone, setTimezone] = useState(localTimezone); // Set local timezone as default
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  // Sync state with URL on load
+  useEffect(() => {
+    const clockType = searchParams.get('type');
+    const zone = searchParams.get('timezone');
+    if (clockType) setIsAnalog(clockType === 'analog');
+    if (zone) setTimezone(zone);
+  }, [searchParams]);
+
+  // Update the URL whenever the clock type or timezone changes
+  useEffect(() => {
+    const clockType = isAnalog ? 'analog' : 'digital';
+    navigate(`/?type=${clockType}&timezone=${timezone}`);
+  }, [isAnalog, timezone, navigate]);
 
   const toggleClock = () => {
     setIsAnalog(!isAnalog);
   };
 
-  const handleTimezoneChange = (event) => {
-    setTimezone(event.target.value);
+  const handleTimezoneChange = (e) => {
+    setTimezone(e.target.value);
   };
 
   const timezones = [
-    { label: 'UTC', value: 'UTC' },
-    { label: 'Pacific Time (US)', value: 'America/Los_Angeles' },
-    { label: 'Eastern Time (US)', value: 'America/New_York' },
-    { label: 'Central European Time', value: 'Europe/Berlin' },
-    { label: 'Indian Standard Time', value: 'Asia/Kolkata' },
-    { label: 'Australian Eastern Time', value: 'Australia/Sydney' },
+    'UTC',
+    'America/New_York',
+    'America/Los_Angeles',
+    'Europe/London',
+    'Asia/Kolkata',
+    'Australia/Sydney',
+    localTimezone, // Add local timezone dynamically
   ];
 
   return (
     <div className="app">
       <h1>Toggle Clock</h1>
-      {/* Dropdown for timezones */}
-      <select value={timezone} onChange={handleTimezoneChange}>
+      <select onChange={handleTimezoneChange} value={timezone}>
         {timezones.map((tz) => (
-          <option key={tz.value} value={tz.value}>
-            {tz.label}
+          <option key={tz} value={tz}>
+            {tz === localTimezone ? `${tz} (Local)` : tz}
           </option>
         ))}
       </select>
-
-      {/* Clock Component */}
-      {isAnalog ? (
-        <AnalogClock timezone={timezone} />
-      ) : (
-        <DigitalClock timezone={timezone} />
-      )}
-
-      {/* Toggle Button */}
+      {isAnalog ? <AnalogClock timezone={timezone} /> : <DigitalClock timezone={timezone} />}
       <button onClick={toggleClock}>
         {isAnalog ? 'Switch to Digital' : 'Switch to Analog'}
       </button>
@@ -51,4 +62,12 @@ function App() {
   );
 }
 
-export default App;
+export default function MainApp() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<App />} />
+      </Routes>
+    </Router>
+  );
+}
