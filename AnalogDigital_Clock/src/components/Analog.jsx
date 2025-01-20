@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from 'react';
+import moment from 'moment-timezone'; // Install using `npm install moment-timezone`
 import './Clock.css';
 
-const Clock = () => {
-  const [time, setTime] = useState(new Date());
+const Clock = ({ timezone = 'UTC' }) => {
+  const [time, setTime] = useState(moment.tz(timezone));
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTime(new Date());
+      setTime(moment.tz(timezone)); // Update time based on the selected timezone
     }, 1000);
 
     return () => clearInterval(interval); // Cleanup interval on component unmount
-  }, []);
+  }, [timezone]);
 
-  const seconds = time.getSeconds();
-  const minutes = time.getMinutes();
-  const hours = time.getHours();
+  const seconds = time.seconds();
+  const minutes = time.minutes();
+  const hours = time.hours();
 
   // Calculate rotation for each hand
   const secondHandStyle = {
@@ -36,12 +37,9 @@ const Clock = () => {
     <div className="clock">
       <div className="clock-face">
         {numbers.map((num, index) => {
-          // Fix angle calculation to make numbers anti-clockwise
-          const angle =270 + (index + 1)*30; // 30 degrees per number
-          
-          // Anti-clockwise adjustment: Starting from 12 at top (0 degrees)
+          const angle = 270 + (index + 1) * 30; // Adjust angle for positioning numbers
           const style = {
-            transform: `rotate(${angle}deg) translate(110px) rotate(-${angle}deg)`, 
+            transform: `rotate(${angle}deg) translate(110px) rotate(-${angle}deg)`,
           };
 
           return (
