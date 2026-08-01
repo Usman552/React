@@ -44,3 +44,11 @@
     background-color: #000;
     color: #fff;
 }
+.form{
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    margin: 20px 40px;  
+    border: 1px solid #ccc;
+    padding: 20px;
+}
