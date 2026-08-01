@@ -1,0 +1,27 @@
+.skills {
+  padding: 40px 0 80px;
+}
+
+.skills__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 22px;
+}
+
+.skill-card {
+  padding: 26px 16px;
+  text-align: center;
+  font-family: var(--font-heading);
+  font-weight: 500;
+  color: var(--text);
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+/* Neumorphism hover: raised card "presses in" — jaisa real button */
+.skill-card:hover {
+  box-shadow:
+    inset 4px 4px 10px rgba(0, 0, 0, 0.4),
+    inset -3px -3px 8px rgba(255, 255, 255, 0.03);
+  color: var(--accent);
+  transform: scale(0.98);
+}
