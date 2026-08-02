@@ -1,27 +1,59 @@
 .skills {
-  padding: 40px 0 80px;
+  padding: 40px 0 90px;
 }
 
 .skills__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 22px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
 }
 
 .skill-card {
-  padding: 26px 16px;
-  text-align: center;
-  font-family: var(--font-heading);
-  font-weight: 500;
-  color: var(--text);
-  transition: box-shadow 0.25s ease, transform 0.25s ease;
+  padding: 22px 24px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
 
-/* Neumorphism hover: raised card "presses in" — jaisa real button */
 .skill-card:hover {
-  box-shadow:
-    inset 4px 4px 10px rgba(0, 0, 0, 0.4),
-    inset -3px -3px 8px rgba(255, 255, 255, 0.03);
-  color: var(--accent);
-  transform: scale(0.98);
+  transform: translateY(-4px);
+  border-color: rgba(124, 92, 255, 0.4);
+  box-shadow: 0 18px 34px -18px rgba(124, 92, 255, 0.45);
+}
+
+.skill-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.skill-card__name {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--text);
+}
+
+.skill-card__percent {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--cyan);
+}
+
+.skill-card__track {
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.skill-card__fill {
+  display: block;
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  background: var(--gradient);
+  transition: width 1s ease 0.15s;
+}
+
+.skill-card.is-visible .skill-card__fill {
+  width: var(--target);
 }

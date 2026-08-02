@@ -1,19 +1,5 @@
 import { useEffect, useRef } from "react";
 
-/**
- * useScrollReveal
- * -----------------
- * Har element ke liye ek "ref" deta hai. Jab wo element scroll kar ke
- * viewport me aata hai, IntersectionObserver "is-visible" class add
- * kar deta hai — jis se index.css wali .reveal animation chal jati hai.
- *
- * Isme koi extra npm package (framer-motion waghera) ki zaroorat nahi,
- * pure browser API (IntersectionObserver) use hota hai.
- *
- * Usage:
- *   const ref = useScrollReveal();
- *   <div ref={ref} className="reveal">...</div>
- */
 export default function useScrollReveal(options = {}) {
   const ref = useRef(null);
 
@@ -25,7 +11,6 @@ export default function useScrollReveal(options = {}) {
       ([entry]) => {
         if (entry.isIntersecting) {
           entry.target.classList.add("is-visible");
-          // ek dafa reveal hone ke baad observe karna band kar dete hain
           observer.unobserve(entry.target);
         }
       },

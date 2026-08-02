@@ -1,25 +1,26 @@
-/* =========================================================
-   PORTFOLIO — GLOBAL STYLES (Claymorphism / Dark theme)
-   ========================================================= */
-
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
 
 :root {
-  /* Dark background */
-  --bg: #1b1e2b;
+  --bg: #0a0d17;
+  --bg-soft: #0d1120;
+  --panel: rgba(255, 255, 255, 0.045);
+  --panel-strong: rgba(255, 255, 255, 0.07);
+  --border: rgba(255, 255, 255, 0.09);
 
-  /* Clay surface — thora lighter aur saturated, taake "clay" jaisa dikhe */
-  --surface: #262a3d;
+  --violet: #7c5cff;
+  --cyan: #38dfff;
+  --pink: #ff5cad;
+  --gradient: linear-gradient(120deg, var(--violet), var(--cyan));
 
-  --text: #f1f2f6;
-  --text-muted: #9498ac;
-  --accent: #8b7cf6; /* soft purple — buttons, highlights */
+  --text: #f3f5fb;
+  --muted: #8b93ac;
 
-  --font-heading: 'Poppins', sans-serif;
+  --font-display: 'Bricolage Grotesque', sans-serif;
   --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
 
-  --radius: 28px;
-  --max-width: 1100px;
+  --max-width: 1140px;
+  --radius: 22px;
 }
 
 * {
@@ -36,89 +37,140 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-body);
-  line-height: 1.6;
+  line-height: 1.65;
+  overflow-x: hidden;
 }
 
 h1, h2, h3 {
-  font-family: var(--font-heading);
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; display: block; }
+button { font-family: var(--font-body); cursor: pointer; }
 
 .container {
   max-width: var(--max-width);
   margin: 0 auto;
   padding: 0 24px;
+  position: relative;
+  z-index: 1;
 }
 
-/* Claymorphism "puffy" surface — thick soft shadow + halki inner
-   highlight, jis se element 3D "clay" jaisa uthta hua lagta hai */
-.clay {
-  background: var(--surface);
+.aurora {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.aurora__blob {
+  position: absolute;
+  width: 46vw;
+  height: 46vw;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.32;
+}
+
+.aurora__blob--1 {
+  top: -10%;
+  left: -8%;
+  background: var(--violet);
+  animation: drift-1 22s ease-in-out infinite alternate;
+}
+
+.aurora__blob--2 {
+  bottom: -15%;
+  right: -10%;
+  background: var(--cyan);
+  animation: drift-2 26s ease-in-out infinite alternate;
+}
+
+@keyframes drift-1 {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(6vw, 8vh) scale(1.12); }
+}
+
+@keyframes drift-2 {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(-6vw, -6vh) scale(1.08); }
+}
+
+.glass {
+  background: var(--panel);
+  border: 1px solid var(--border);
   border-radius: var(--radius);
-  box-shadow:
-    8px 8px 20px rgba(0, 0, 0, 0.45),
-    -6px -6px 16px rgba(255, 255, 255, 0.03),
-    inset 2px 2px 4px rgba(255, 255, 255, 0.06),
-    inset -3px -3px 8px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
 }
 
-/* "Pressed in" version — form inputs ke liye */
-.clay-inset {
-  background: var(--surface);
-  border-radius: 16px;
-  box-shadow:
-    inset 4px 4px 10px rgba(0, 0, 0, 0.4),
-    inset -3px -3px 8px rgba(255, 255, 255, 0.03);
+.text-gradient {
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .section-label {
-  font-family: var(--font-heading);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
   font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
+  color: var(--cyan);
   text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 16px;
+  letter-spacing: 0.12em;
+  margin-bottom: 18px;
+}
+
+.section-label::before {
+  content: '';
+  width: 22px;
+  height: 1px;
+  background: var(--cyan);
 }
 
 .btn {
-  font-family: var(--font-heading);
+  font-family: var(--font-body);
   font-weight: 600;
   font-size: 0.95rem;
-  padding: 14px 30px;
+  padding: 15px 32px;
   border: none;
-  border-radius: 16px;
-  background: var(--accent);
-  color: #ffffff;
-  box-shadow:
-    6px 6px 16px rgba(139, 124, 246, 0.35),
-    inset -3px -3px 6px rgba(0, 0, 0, 0.15),
-    inset 3px 3px 6px rgba(255, 255, 255, 0.15);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  cursor: pointer;
+  border-radius: 14px;
+  color: var(--text);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-.btn:hover {
+.btn--primary {
+  background: var(--gradient);
+  color: #0a0d17;
+  box-shadow: 0 14px 30px -12px rgba(124, 92, 255, 0.55);
+}
+
+.btn--primary:hover {
   transform: translateY(-3px);
+  box-shadow: 0 20px 36px -12px rgba(124, 92, 255, 0.7);
 }
 
-.btn:active {
-  transform: translateY(0);
-  box-shadow:
-    inset 3px 3px 8px rgba(0, 0, 0, 0.3),
-    inset -2px -2px 6px rgba(255, 255, 255, 0.1);
+.btn--ghost {
+  background: var(--panel);
+  border: 1px solid var(--border);
 }
 
-/* Simple scroll-reveal — fade + slide up */
+.btn--ghost:hover {
+  transform: translateY(-3px);
+  border-color: var(--cyan);
+}
+
 .reveal {
   opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transform: translateY(26px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
 }
 
 .reveal.is-visible {
@@ -129,4 +181,10 @@ a {
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .reveal { opacity: 1; transform: none; transition: none; }
+  .aurora__blob { animation: none; }
+}
+
+::selection {
+  background: var(--violet);
+  color: #fff;
 }

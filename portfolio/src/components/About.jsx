@@ -1,12 +1,19 @@
-import React from "react";
 import useScrollReveal from "../hooks/useScrollReveal";
+import useCountUp from "../hooks/useCountUp";
 import "./About.css";
 
-const stats = [
-  { value: "1+", label: "Year Experience" },
-  { value: "10+", label: "Projects Built" },
-  { value: "BS SE", label: "2022 - 2026" },
-];
+function Stat({ target, suffix, label }) {
+  const { ref, value } = useCountUp(target);
+  return (
+    <div className="about__stat">
+      <span ref={ref} className="about__value">
+        {value}
+        {suffix}
+      </span>
+      <span className="about__label">{label}</span>
+    </div>
+  );
+}
 
 export default function About() {
   const ref = useScrollReveal();
@@ -16,22 +23,18 @@ export default function About() {
       <div className="container">
         <p className="section-label">About Me</p>
 
-        <div ref={ref} className="about__card clay reveal">
+        <div ref={ref} className="about__card glass reveal">
           <p className="about__text">
-            Main <strong>Usman Qasim</strong> hoon, Multan, Pakistan se ek
-            Front-End Developer. Meri background PHP, Laravel aur
-            CodeIgniter mein hai, aur ab main React ke saath modern,
-            simple aur user-friendly interfaces banane par focus kar
-            raha hoon.
+            I'm <strong>Usman Qasim</strong>, a Front-End Developer based in
+            Multan, Pakistan. My background is in PHP, Laravel and CodeIgniter,
+            and I now focus on building modern, animated and premium-feel
+            interfaces with React.
           </p>
 
           <div className="about__stats">
-            {stats.map((stat) => (
-              <div className="about__stat" key={stat.label}>
-                <span className="about__value">{stat.value}</span>
-                <span className="about__label">{stat.label}</span>
-              </div>
-            ))}
+            <Stat target={1} suffix="+" label="Year Experience" />
+            <Stat target={10} suffix="+" label="Projects Built" />
+            <Stat target={2026} suffix="" label="Graduating" />
           </div>
         </div>
       </div>

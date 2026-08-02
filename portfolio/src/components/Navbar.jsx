@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Navbar.css";
 
 const links = [
@@ -9,14 +9,23 @@ const links = [
 ];
 
 export default function Navbar() {
+  const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
-  return (
-    <header className="navbar">
-      <div className="container navbar__inner">
-        <span className="navbar__logo">Usman Qasim</span>
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
-        <nav className={`navbar__links ${open ? "is-open" : ""}`}>
+  return (
+    <header className={`navbar ${scrolled ? "navbar--scrolled glass" : ""}`}>
+      <div className="container navbar__inner">
+        <span className="navbar__logo">
+          Usman<span className="text-gradient">.</span>
+        </span>
+
+        <nav className={`navbar__links glass ${open ? "is-open" : ""}`}>
           {links.map((link) => (
             <a key={link.href} href={link.href} onClick={() => setOpen(false)}>
               {link.label}
@@ -24,7 +33,7 @@ export default function Navbar() {
           ))}
         </nav>
 
-        <button className="navbar__toggle clay" onClick={() => setOpen(!open)}>
+        <button className="navbar__toggle" onClick={() => setOpen(!open)}>
           {open ? "✕" : "☰"}
         </button>
       </div>

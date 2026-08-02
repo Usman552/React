@@ -1,17 +1,19 @@
-# Animated Portfolio (React) — Claymorphism Dark Theme
+# Animated Portfolio (React) — "Aurora Glass" Theme
 
-## Files kahan lagane hain?
+## Where to place the files
 
-Apne React project ke `src/` folder ke andar in files ko exactly isi
-structure ke saath copy/paste kar dein (agar `App.jsx` / `index.css`
-pehle se hai to overwrite kar dein):
+Copy these files into your React project's `src/` folder, keeping the
+exact same structure (overwrite `App.jsx` / `index.css` if you already
+have them):
 
 ```
 src/
 ├── App.jsx
 ├── index.css
 ├── hooks/
-│   └── useScrollReveal.js
+│   ├── useScrollReveal.js
+│   ├── useTilt.js
+│   └── useCountUp.js
 └── components/
     ├── Navbar.jsx / Navbar.css
     ├── Hero.jsx / Hero.css
@@ -22,32 +24,52 @@ src/
     └── Footer.jsx / Footer.css
 ```
 
-## Kaise chalayen
+## Adding your photo
+
+`Hero.jsx` looks for your photo at `/profile.jpg`.
+
+1. Put your photo file in the `public/` folder of your project (both
+   Vite and Create React App have one at the root).
+2. Name it `profile.jpg` — or change the path in `Hero.jsx`:
+   `<img src="/profile.jpg" ... />`
+
+## Adding project screenshots
+
+In `components/Projects.jsx`, each project has an `image` field, set
+to `null` by default (which shows a gradient placeholder instead).
+To use a real screenshot:
+
+1. Put the image in `public/` (e.g. `public/projects/zands.jpg`).
+2. Set `image: "/projects/zands.jpg"` on that project.
+
+## Running it
 
 ```bash
 npm install
-npm run dev      # Vite hai to
-# ya
-npm start         # Create React App hai to
+npm run dev      # if using Vite
+# or
+npm start         # if using Create React App
 ```
 
-Koi extra npm package ki zaroorat nahi — sab kuch plain CSS aur
-browser ke IntersectionObserver API se ban raha hai.
+No extra npm packages are required — everything runs on plain CSS and
+browser APIs (IntersectionObserver, requestAnimationFrame).
 
-## Design kaisa hai
+## Design notes — "Aurora Glass"
 
-**Claymorphism, dark background par** — cards "clay" (mitti/plasticine)
-jaise puffy aur 3D lagte hain, kyunke unpe thick soft shadow aur halki
-inner highlight dono lagi hui hain. Background dark navy hai (`#1b1e2b`)
-aur accent color soft purple (`#8b7cf6`).
+- **Background**: deep navy (`#0a0d17`) with two slow-drifting
+  gradient blobs (violet + cyan), defined in `App.jsx`'s `.aurora` div.
+- **Glass cards**: frosted panels using `backdrop-filter: blur` — the
+  `.glass` class in `index.css`.
+- **3D tilt**: Project cards tilt toward the cursor and glow follows
+  the mouse — see `hooks/useTilt.js`.
+- **Animated counters**: the About stats count up from 0 when
+  scrolled into view — `hooks/useCountUp.js`.
+- **Skill bars**: each skill card fills its progress bar on scroll.
+- **Marquee**: an auto-scrolling tech-stack strip under the hero.
 
-- Sab colors `index.css` ke `:root` variables me hain (`--bg`, `--surface`, `--accent`).
-- `.clay` class = uthi hui puffy surface (cards, avatar, buttons)
-- `.clay-inset` class = dabi hui surface (form inputs)
+## Customizing
 
-## Customize karna
-
-- **Naam**: `Navbar.jsx`, `Hero.jsx`, `Footer.jsx` me "Usman Qasim".
-- **Skills**: `components/Skills.jsx` ka `skills` array.
-- **Projects**: `components/Projects.jsx` ka `projects` array.
-- **Contact form**: `components/Contact.jsx` me apna backend/EmailJS laga sakte ho.
+- **Colors**: `index.css` → `:root` variables (`--bg`, `--violet`, `--cyan`).
+- **Skills & levels**: `components/Skills.jsx` → `skills` array.
+- **Projects**: `components/Projects.jsx` → `projects` array.
+- **Contact links**: `components/Contact.jsx` and `Footer.jsx`.

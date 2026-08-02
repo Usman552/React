@@ -1,6 +1,24 @@
 .footer {
-  padding: 26px 0;
-  text-align: center;
+  padding: 30px 0;
+  border-top: 1px solid var(--border);
+}
+
+.footer__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
   font-size: 0.85rem;
-  color: var(--text-muted);
+  color: var(--muted);
+}
+
+.footer__socials {
+  display: flex;
+  gap: 18px;
+  font-family: var(--font-mono);
+}
+
+.footer__socials a:hover {
+  color: var(--cyan);
 }
