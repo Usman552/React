@@ -6,7 +6,6 @@ import Form from "./form.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <App />
     <Form />
   </StrictMode>,
 );
