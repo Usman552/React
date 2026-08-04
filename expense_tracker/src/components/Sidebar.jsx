@@ -16,7 +16,7 @@ function Sidebar() {
             <li>
               <NavLink
                 to="/"
-                className={`block flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700 ${theme === "dark" ? "hover:bg-gray-700 text-white" : "hover:bg-gray-200 text-black"}`}
+                className={`block flex items-center gap-3 p-3 rounded-lg  ${theme === "dark" ? "hover:bg-gray-700 text-white" : "hover:bg-gray-100 text-black"}`}
               >
                 <FaHome />
                 Dashboard
@@ -25,7 +25,7 @@ function Sidebar() {
             <li>
               <NavLink
                 to="/add-expense"
-                className="block flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700"
+                className={`block flex items-center gap-3 p-3 rounded-lg  ${theme === "dark" ? "hover:bg-gray-700 text-white" : "hover:bg-gray-100 text-black"}`}
               >
                 <FaPlus />
                 Add Expense
@@ -34,7 +34,7 @@ function Sidebar() {
             <li>
               <NavLink
                 to="/transactions"
-                className="block flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700"
+                className={`block flex items-center gap-3 p-3 rounded-lg  ${theme === "dark" ? "hover:bg-gray-700 text-white" : "hover:bg-gray-100 text-black"}`}
               >
                 <FaList />
                 Transactions

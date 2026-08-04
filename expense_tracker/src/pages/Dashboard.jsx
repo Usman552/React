@@ -7,12 +7,15 @@ import {
   FaPiggyBank,
 } from "react-icons/fa6";
 import Card from "../components/Card";
-function Dashboard() {
+function Dashboard({ expenses }) {
   const { theme } = useContext(ThemeContext);
+  const totalBalance = expenses.reduce((total, expense) => {
+    return total + Number(expense.amount);
+  }, 0);
   const cards = [
     {
       title: "Total Balance",
-      amount: "PKR 50,000",
+      amount: "PKR 20,000",
       icon: <FaWallet />,
       border: "border-blue-500",
     },
@@ -24,7 +27,7 @@ function Dashboard() {
     },
     {
       title: "Expense",
-      amount: "PKR 30,000",
+      amount: `PKR ${totalBalance.toLocaleString()}`,
       icon: <FaArrowTrendDown />,
       border: "border-red-500",
     },
@@ -35,6 +38,7 @@ function Dashboard() {
       border: "border-yellow-500",
     },
   ];
+
   return (
     <>
       <div

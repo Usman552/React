@@ -1,14 +1,28 @@
 import { useContext, useState } from "react";
 import { ThemeContext } from "../context/ThemeContext";
-function AddExpense({ expenses, setExpenses }) {
+import { useNavigate } from "react-router-dom";
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "../firebase/firebase";
+function AddExpense({
+  expenses,
+  setExpenses,
+  editExpense,
+  setEditExpense,
+  editIndex,
+  setEditIndex,
+}) {
   const { theme } = useContext(ThemeContext);
 
-  const [formData, setformData] = useState({
-    expenseName: "",
-    amount: "",
-    date: "",
-    category: "",
-  });
+  const [formData, setformData] = useState(
+    () =>
+      editExpense || {
+        expenseName: "",
+        amount: "",
+        date: "",
+        category: "",
+      },
+  );
+  const navigate = useNavigate();
   const handleChange = (e) => {
     const { name, value } = e.target;
     setformData((prevData) => ({
@@ -16,21 +30,35 @@ function AddExpense({ expenses, setExpenses }) {
       [name]: value,
     }));
   };
- const handleSubmit = (e) => {
-  e.preventDefault();
+  const handleSubmit = async(e) => {
+    e.preventDefault();
 
-  const newExpenses = [...expenses, formData];
-  setExpenses(newExpenses);
+    if (editIndex !== null) {
+      const updatedExpenses = [...expenses];
 
-  console.log(newExpenses);
+      updatedExpenses[editIndex] = formData;
 
-  setformData({
-    expenseName: "",
-    amount: "",
-    date: "",
-    category: "",
-  });
-};
+      setExpenses(updatedExpenses);
+
+      setEditExpense(null);
+      setEditIndex(null);
+    } else {
+      try{
+        await addDoc(collection(db, "expenses"), formData);
+      }
+      catch(error){
+        console.error("Error adding document: ", error);
+      }
+    }
+
+    setformData({
+      expenseName: "",
+      amount: "",
+      date: "",
+      category: "",
+    });
+    navigate("/transactions");
+  };
   return (
     <div className="max-w-2xl mx-auto">
       <form
@@ -73,7 +101,7 @@ function AddExpense({ expenses, setExpenses }) {
         <div className="w-full rounded-lg p-2">
           <label className="mb-3 block">Category:</label>
           <select
-            className="w-full border rounded-lg p-2"
+            className={`w-full border rounded-lg p-2 ${theme === "dark" ? "bg-gray-700 text-white" : "bg-white text-black"}`}
             name="category"
             value={formData.category}
             onChange={handleChange}
@@ -91,7 +119,7 @@ function AddExpense({ expenses, setExpenses }) {
           type="submit"
           className="w-full bg-blue-600 text-white rounded-lg p-3"
         >
-          Add Expense
+          {editIndex !== null ? "Update Expense" : "Add Expense"}
         </button>
       </form>
     </div>

@@ -12,7 +12,7 @@ function Card({ title, amount, icon, border }) {
           <h3 className="text-lg font-semibold">{title}</h3>
           <div className="text-2xl">{icon}</div>
         </div>
-        <p className="text-2xl font-bold mt-2">{amount}</p>
+        <p className="text-2xl font-bold mt-2"> {amount}</p>
       </div>
     </div>
   );
