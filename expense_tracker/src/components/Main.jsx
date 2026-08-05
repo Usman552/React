@@ -9,23 +9,32 @@ import { ThemeContext } from "../context/ThemeContext";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase/firebase";
 function Main() {
-  useEffect(() => {
-    fetchExpenses();
-  }, []);
-
-  async function fetchExpenses() {
-    try {
-      const querySnapshot = await getDocs(collection(db, "expenses"));
-      const expensesData = querySnapshot.docs.map((doc) => doc.data());
-      setExpenses(expensesData);
-    } catch (error) {
-      console.error("Error fetching expenses: ", error);
-    }
-  }
   const { theme } = useContext(ThemeContext);
   const [expenses, setExpenses] = useState([]);
   const [editExpense, setEditExpense] = useState(null);
   const [editIndex, setEditIndex] = useState(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function fetchExpenses() {
+      try {
+        const querySnapshot = await getDocs(collection(db, "expenses"));
+        const expensesData = querySnapshot.docs.map((doc) => doc.data());
+        if (!cancelled) {
+          setExpenses(expensesData);
+        }
+      } catch (error) {
+        console.error("Error fetching expenses: ", error);
+      }
+    }
+
+    fetchExpenses();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
   return (
     <main
       className={`flex-1 min-h-screen ${theme === "dark" ? "bg-gray-700 text-white" : "bg-gray-100 text-black"}`}

@@ -30,7 +30,7 @@ function AddExpense({
       [name]: value,
     }));
   };
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (editIndex !== null) {
@@ -43,10 +43,9 @@ function AddExpense({
       setEditExpense(null);
       setEditIndex(null);
     } else {
-      try{
+      try {
         await addDoc(collection(db, "expenses"), formData);
-      }
-      catch(error){
+      } catch (error) {
         console.error("Error adding document: ", error);
       }
     }
