@@ -5,6 +5,7 @@ import TodoList from "./components/TodoList";
 
 function App() {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [editingTodo, setEditingTodo] = useState<Todo | null>(null);
 
   const addTodo = (text: string) => {
     setTodos((currentTodos) => [
@@ -25,11 +26,35 @@ function App() {
       }),
     );
   };
+  const startEditing = (todo: Todo) => {
+    setEditingTodo(todo);
+  };
+  const editTodo = (id: number, newText: string) => {
+    setTodos((currentTodos) =>
+      currentTodos.map((todo) => {
+        if (todo.id === id) {
+          return { ...todo, text: newText };
+        }
+        return todo;
+      }),
+    );
+
+    setEditingTodo(null);
+  };
 
   return (
     <div className="flex h-screen flex-col items-center justify-center bg-gray-100 ">
-      <TodoForm addTodo={addTodo} />
-      <TodoList todos={todos} deleteTodo={deleteTodo} toggleTodo={toggleTodo} />
+      <TodoForm
+        addTodo={addTodo}
+        editTodo={editTodo}
+        editingTodo={editingTodo}
+      />
+      <TodoList
+        todos={todos}
+        deleteTodo={deleteTodo}
+        toggleTodo={toggleTodo}
+        startEditing={startEditing}
+      />
     </div>
   );
 }
