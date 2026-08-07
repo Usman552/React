@@ -12,7 +12,7 @@ function TodoList({
 }) {
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4">Todo List</h1>
+      <h1 className="text-2xl font-bold my-4 ">Todo List</h1>
       {todos.length > 0 ? (
         <ul className="space-y-2 border border-gray-300 rounded-lg shadow-sm width-full p-4">
           {todos.map((todo) => (
