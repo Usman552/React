@@ -8,10 +8,10 @@ function TodoForm({ addTodo, editTodo, editingTodo }: TodoFormProps) {
       setText(editingTodo.text);
     }
   }, [editingTodo]);
-  const HandleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+const HandleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setText(e.target.value);
   };
-  const HandleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+const HandleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (editingTodo) {
       editTodo(editingTodo.id, text);
