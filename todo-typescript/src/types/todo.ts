@@ -1,23 +1,23 @@
-export interface Todo{
-    id: number;
-    text:string;
-    completed: boolean;
+export interface Todo {
+  id: string;
+  text: string;
+  completed: boolean;
+  group: string;
 }
 
-export interface TodoListProps{
-    todos: Todo[];
-    deleteTodo: (id: number) => void;
-    toggleTodo: (id: number) => void;
+export interface TodoListProps {
+  todos: Todo[];
 }
+
 export interface TodoItemProps {
   todo: Todo;
-  deleteTodo: (id: Todo["id"]) => void;
-  toggleTodo: (id: Todo["id"]) => void;
-     startEditing: (todo: TodoItemProps["todo"]) => void;
-};
-export interface TodoFormProps {
-  addTodo: (text: string) => void;
-  editTodo: (id: number, newText: string) => void;
-  editingTodo: Todo | null;
+  deleteTodo: (id: string) => void;
+  toggleTodo: (id: string, completed: boolean) => void;
+  startEditing: (todo: Todo) => void;
+}
 
+export interface TodoFormProps {
+  addTodo: (text: string, group: string) => void;
+  editTodo: (id: string, newText: string) => void;
+  editingTodo: Todo | null;
 }
