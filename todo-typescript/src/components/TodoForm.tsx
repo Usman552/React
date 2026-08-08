@@ -3,6 +3,7 @@ import type { TodoFormProps } from "../types/todo";
 
 function TodoForm({ addTodo, editTodo, editingTodo }: TodoFormProps) {
   const [text, setText] = useState("");
+  
   useEffect(() => {
     if (editingTodo) {
       setText(editingTodo.text);
