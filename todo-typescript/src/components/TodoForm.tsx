@@ -1,7 +1,11 @@
 import { useState, useEffect } from "react";
-import type { TodoFormProps } from "../types/todo";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { addTodo, editTodo } from "../store/todosSlice";
 
-function TodoForm({ addTodo, editTodo, editingTodo }: TodoFormProps) {
+function TodoForm() {
+  const dispatch = useAppDispatch();
+  const editingTodo = useAppSelector((state) => state.todos.editingTodo);
+
   const [text, setText] = useState("");
   const [group, setGroup] = useState("Personal");
 
@@ -25,9 +29,9 @@ function TodoForm({ addTodo, editTodo, editingTodo }: TodoFormProps) {
     if (!text.trim()) return;
 
     if (editingTodo) {
-      editTodo(editingTodo.id, text);
+      dispatch(editTodo({ id: editingTodo.id, newText: text }));
     } else {
-      addTodo(text, group);
+      dispatch(addTodo({ text, group }));
     }
 
     setText("");

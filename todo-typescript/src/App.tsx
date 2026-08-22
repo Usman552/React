@@ -6,24 +6,17 @@ import TodoForm from "./components/TodoForm";
 import type { Todo } from "./types/todo";
 import TodoList from "./components/TodoList";
 import Auth from "./components/Auth";
-import {
-  addDoc,
-  collection,
-  onSnapshot,
-  query,
-  where,
-  deleteDoc,
-  updateDoc,
-  doc,
-} from "firebase/firestore";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { useAppDispatch } from "./store/hooks";
+import { setTodos } from "./store/todosSlice";
 
 function App() {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [user, setUser] = useState<User | null>(null);
+  const dispatch = useAppDispatch();
+
   const handleLogout = async () => {
     await signOut(auth);
   };
-  const [editingTodo, setEditingTodo] = useState<Todo | null>(null);
-  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -32,14 +25,16 @@ function App() {
 
     return unsubscribe;
   }, []);
+
   useEffect(() => {
     if (!user) {
-      setTodos([]);
+      dispatch(setTodos([]));
       return;
     }
 
     const q = query(collection(db, "todos"), where("userId", "==", user.uid));
 
+    // Firestore me kuch bhi change ho, yeh listener turant Redux store update kar dega
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const todosData: Todo[] = snapshot.docs.map((doc) => ({
         id: doc.id,
@@ -48,40 +43,11 @@ function App() {
         group: doc.data().group,
       }));
 
-      setTodos(todosData);
+      dispatch(setTodos(todosData));
     });
 
     return unsubscribe;
-  }, [user]);
-
-  const addTodo = async (text: string, group: string) => {
-    if (!auth.currentUser) return;
-
-    await addDoc(collection(db, "todos"), {
-      text,
-      completed: false,
-      group,
-      userId: auth.currentUser.uid,
-    });
-  };
-  const deleteTodo = async (id: string) => {
-    await deleteDoc(doc(db, "todos", id));
-  };
-  const toggleTodo = async (id: string, completed: boolean) => {
-    await updateDoc(doc(db, "todos", id), {
-      completed: !completed,
-    });
-  };
-  const startEditing = (todo: Todo) => {
-    setEditingTodo(todo);
-  };
-  const editTodo = async (id: string, newText: string) => {
-    await updateDoc(doc(db, "todos", id), {
-      text: newText,
-    });
-
-    setEditingTodo(null);
-  };
+  }, [user, dispatch]);
 
   return (
     <>
@@ -94,18 +60,9 @@ function App() {
             Logout
           </button>
 
-          <TodoForm
-            addTodo={addTodo}
-            editTodo={editTodo}
-            editingTodo={editingTodo}
-          />
+          <TodoForm />
 
-          <TodoList
-            todos={todos}
-            deleteTodo={deleteTodo}
-            toggleTodo={toggleTodo}
-            startEditing={startEditing}
-          />
+          <TodoList />
         </div>
       ) : (
         <Auth />
