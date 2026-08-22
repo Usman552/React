@@ -1,16 +1,11 @@
-import type { Todo, TodoListProps } from "../types/todo";
+import type { Todo } from "../types/todo";
 import TodoItem from "./TodoItem";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { deleteTodo, toggleTodo, startEditing } from "../store/todosSlice";
 
-function TodoList({
-  todos,
-  deleteTodo,
-  toggleTodo,
-  startEditing,
-}: TodoListProps & {
-  deleteTodo: (id: string) => void;
-  startEditing: (todo: Todo) => void;
-  toggleTodo: (id: string, completed: boolean) => void;
-}) {
+function TodoList() {
+  const dispatch = useAppDispatch();
+  const todos = useAppSelector((state) => state.todos.items);
 
   // Todos ko groups ke according divide karna
   const groupedTodos = todos.reduce(
@@ -53,9 +48,11 @@ function TodoList({
                     <TodoItem
                       key={todo.id}
                       todo={todo}
-                      deleteTodo={deleteTodo}
-                      toggleTodo={toggleTodo}
-                      startEditing={startEditing}
+                      deleteTodo={(id) => dispatch(deleteTodo(id))}
+                      toggleTodo={(id, completed) =>
+                        dispatch(toggleTodo({ id, completed }))
+                      }
+                      startEditing={(todo) => dispatch(startEditing(todo))}
                     />
                   ))}
                 </ul>
