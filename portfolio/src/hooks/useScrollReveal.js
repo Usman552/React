@@ -1,6 +1,10 @@
 import { useEffect, useRef } from "react";
 
-export default function useScrollReveal(options = {}) {
+/**
+ * Adds `is-visible` to the element the first time it scrolls into view.
+ * Options are primitives so the observer is created once per element.
+ */
+export default function useScrollReveal(threshold = 0.15, rootMargin = "0px 0px -60px 0px") {
   const ref = useRef(null);
 
   useEffect(() => {
@@ -14,16 +18,12 @@ export default function useScrollReveal(options = {}) {
           observer.unobserve(entry.target);
         }
       },
-      {
-        threshold: 0.15,
-        rootMargin: "0px 0px -60px 0px",
-        ...options,
-      }
+      { threshold, rootMargin }
     );
 
     observer.observe(node);
     return () => observer.disconnect();
-  }, [options]);
+  }, [threshold, rootMargin]);
 
   return ref;
 }

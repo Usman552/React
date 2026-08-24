@@ -1,66 +1,72 @@
-import React from "react";
+import { useMemo, useState } from "react";
 import useScrollReveal from "../hooks/useScrollReveal";
-import useTilt from "../hooks/useTilt";
+import { projects, categories } from "../data/projects";
+import { social } from "../data/site";
 import "./Projects.css";
 
-const projects = [
-  {
-    title: "Z&S Perfumes",
-    description: "An e-commerce store built with Laravel 10, complete with a product catalog, cart and checkout flow.",
-    tech: ["Laravel", "MySQL", "Bootstrap"],
-    image: null,
-    gradient: "linear-gradient(135deg, #7c5cff, #38dfff)",
-    demo: "#",
-    github: "#",
-  },
-  {
-    title: "Nic & Mia — By the Seashore",
-    description: "A responsive frontend site for a children's swimwear brand with a clean product showcase.",
-    tech: ["HTML", "CSS", "JavaScript"],
-    image: null,
-    gradient: "linear-gradient(135deg, #ff5cad, #7c5cff)",
-    demo: "#",
-    github: "#",
-  },
-  {
-    title: "Emotion Recognition from Speech",
-    description: "A Final Year Project — a machine learning model that detects emotions from speech.",
-    tech: ["Python", "Machine Learning"],
-    image: null,
-    gradient: "linear-gradient(135deg, #38dfff, #35e8c3)",
-    demo: "#",
-    github: "#",
-  },
-];
+function isLive(url) {
+  return Boolean(url) && url !== "#";
+}
 
 function ProjectCard({ project, index }) {
-  const reveal = useScrollReveal();
-  const tilt = useTilt(6);
+  const ref = useScrollReveal();
+  const live = isLive(project.demo);
 
   return (
     <article
-      ref={(node) => { reveal.current = node; tilt.ref.current = node; }}
-      className="project-card glass reveal"
-      onMouseMove={tilt.onMouseMove}
-      onMouseLeave={tilt.onMouseLeave}
+      ref={ref}
+      className="project glass reveal"
+      style={{ transitionDelay: `${(index % 3) * 0.07}s` }}
     >
-      <div className="project-card__media" style={{ background: project.image ? undefined : project.gradient }}>
-        {project.image && <img src={project.image} alt={project.title} />}
-        <span className="project-card__index">{String(index + 1).padStart(2, "0")}</span>
-
-        <div className="project-card__overlay">
-          <a href={project.demo} className="project-card__view">View Project →</a>
-        </div>
+      <div
+        className="project__cover"
+        style={{ background: project.image ? undefined : project.gradient }}
+      >
+        {project.image && (
+          <img src={project.image} alt={project.title} loading="lazy" />
+        )}
+        {project.featured && <span className="project__badge">Featured</span>}
       </div>
 
-      <div className="project-card__body">
-        <h3 className="project-card__title">{project.title}</h3>
-        <p className="project-card__desc">{project.description}</p>
+      <div className="project__body">
+        <div className="project__head">
+          <h3 className="project__title">{project.title}</h3>
+          <span className="project__category">{project.category}</span>
+        </div>
 
-        <div className="project-card__tech">
+        <p className="project__desc">{project.description}</p>
+
+        <div className="project__tech">
           {project.tech.map((t) => (
-            <span key={t} className="project-card__pill">{t}</span>
+            <span key={t}>{t}</span>
           ))}
+        </div>
+
+        <div className="project__links">
+          {live ? (
+            <a
+              className="project__link project__link--primary"
+              href={project.demo}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Live demo
+              <span aria-hidden="true">↗</span>
+            </a>
+          ) : (
+            <span className="project__link project__link--soon">Demo soon</span>
+          )}
+
+          {project.github && (
+            <a
+              className="project__link"
+              href={project.github}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Code
+            </a>
+          )}
         </div>
       </div>
     </article>
@@ -68,16 +74,68 @@ function ProjectCard({ project, index }) {
 }
 
 export default function Projects() {
+  const [filter, setFilter] = useState("All");
+
+  const visible = useMemo(
+    () =>
+      filter === "All"
+        ? projects
+        : projects.filter((project) => project.category === filter),
+    [filter]
+  );
+
+  const available = categories.filter(
+    (category) =>
+      category === "All" || projects.some((p) => p.category === category)
+  );
+
   return (
-    <section id="projects" className="projects">
+    <section id="projects" className="section projects">
       <div className="container">
-        <p className="section-label">Projects</p>
+        <div className="projects__head">
+          <div className="section__head projects__intro">
+            <p className="section-label">Projects</p>
+            <h2 className="section__title">
+              Selected <span className="text-gradient">work</span>.
+            </h2>
+            <p className="section__lead">
+              Client builds, full-stack apps and experiments — each one deployed
+              and running.
+            </p>
+          </div>
+
+          <div
+            className="projects__filters"
+            role="tablist"
+            aria-label="Filter projects"
+          >
+            {available.map((category) => (
+              <button
+                key={category}
+                type="button"
+                role="tab"
+                aria-selected={filter === category}
+                className={`projects__filter ${filter === category ? "is-active" : ""}`}
+                onClick={() => setFilter(category)}
+              >
+                {category}
+              </button>
+            ))}
+          </div>
+        </div>
 
         <div className="projects__grid">
-          {projects.map((project, i) => (
-            <ProjectCard project={project} index={i} key={project.title} />
+          {visible.map((project, i) => (
+            <ProjectCard key={project.title} project={project} index={i} />
           ))}
         </div>
+
+        <p className="projects__more">
+          More work on{" "}
+          <a href={social.github} target="_blank" rel="noreferrer">
+            GitHub
+          </a>
+        </p>
       </div>
     </section>
   );

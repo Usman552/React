@@ -1,75 +1,133 @@
-.contact {
-  padding: 40px 0 110px;
-}
-
 .contact__box {
   display: grid;
-  grid-template-columns: 0.9fr 1.1fr;
-  gap: 50px;
-  padding: 48px;
+  grid-template-columns: 1fr 1.05fr;
+  gap: clamp(28px, 5vw, 54px);
+  padding: clamp(28px, 5vw, 48px);
 }
 
 .contact__heading {
-  font-size: 1.9rem;
+  font-size: clamp(1.3rem, 3vw, 1.6rem);
   margin-bottom: 14px;
 }
 
 .contact__text {
   color: var(--muted);
+  font-size: 0.96rem;
   margin-bottom: 26px;
 }
 
+/* ---------- details ---------- */
+.contact__details {
+  list-style: none;
+  display: grid;
+  gap: 14px;
+  padding-bottom: 24px;
+  margin-bottom: 22px;
+  border-bottom: 1px solid var(--border);
+}
+
+.contact__details li {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.contact__key {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--muted);
+}
+
+.contact__val {
+  font-size: 0.96rem;
+  font-weight: 500;
+  color: var(--heading);
+  word-break: break-word;
+}
+
+a.contact__val:hover { color: var(--cyan); }
+
+/* ---------- socials ---------- */
 .contact__socials {
   display: flex;
-  gap: 18px;
-  font-family: var(--font-mono);
-  font-size: 0.88rem;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .contact__socials a {
-  color: var(--cyan);
-  transition: color 0.25s ease;
+  padding: 9px 20px;
+  border-radius: 999px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  background: var(--chip);
+  border: 1px solid var(--border);
+  color: var(--text);
+  transition: transform 0.25s var(--ease), border-color 0.25s var(--ease),
+              color 0.25s var(--ease);
 }
 
 .contact__socials a:hover {
-  color: var(--violet);
+  transform: translateY(-2px);
+  border-color: var(--cyan);
+  color: var(--cyan);
 }
 
+/* ---------- form ---------- */
 .contact__form {
-  display: flex;
-  flex-direction: column;
+  display: grid;
   gap: 16px;
+  align-content: start;
+}
+
+.contact__form label {
+  display: grid;
+  gap: 7px;
+}
+
+.contact__form label > span {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--muted);
 }
 
 .contact__form input,
 .contact__form textarea {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--border);
-  border-radius: 12px;
+  width: 100%;
   padding: 14px 16px;
+  border-radius: var(--radius-sm);
+  background: var(--chip);
+  border: 1px solid var(--border);
   color: var(--text);
-  font-family: var(--font-body);
   font-size: 0.95rem;
-  resize: none;
-  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  resize: vertical;
+  transition: border-color 0.25s var(--ease), background 0.25s var(--ease);
+}
+
+.contact__form input::placeholder,
+.contact__form textarea::placeholder {
+  color: var(--muted);
+  opacity: 0.75;
 }
 
 .contact__form input:focus,
 .contact__form textarea:focus {
   outline: none;
-  border-color: var(--violet);
-  box-shadow: 0 0 0 3px rgba(124, 92, 255, 0.18);
+  border-color: var(--cyan);
 }
 
-.contact__form button {
-  align-self: flex-start;
-  margin-top: 4px;
+.contact__form .btn { margin-top: 4px; }
+
+.contact__note {
+  font-size: 0.78rem;
+  color: var(--muted);
+  text-align: center;
 }
 
-@media (max-width: 820px) {
-  .contact__box {
-    grid-template-columns: 1fr;
-    padding: 32px 24px;
-    gap: 32px;
-  }
+/* ---------- responsive ---------- */
+@media (max-width: 860px) {
+  .contact__box { grid-template-columns: 1fr; }
 }
