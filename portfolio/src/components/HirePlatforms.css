@@ -1,0 +1,99 @@
+/* ============================================================
+   HIRE ON A MARKETPLACE (Upwork / Fiverr)
+   ============================================================ */
+.hire { display: grid; gap: 14px; }
+
+.hire__label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+}
+
+.hire__buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.hire__btn {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  border: 1px solid var(--border-strong);
+  background: var(--panel);
+  transition: border-color 0.4s var(--ease), transform 0.5s var(--ease-out), background 0.4s var(--ease);
+}
+
+.hire__btn:hover { transform: translateY(-2px); background: var(--panel-strong); }
+.hire__btn--upwork:hover { border-color: #14a800; }
+.hire__btn--fiverr:hover { border-color: #1dbf73; }
+
+.hire__mark {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 0.95rem;
+  letter-spacing: -0.04em;
+  color: #fff;
+  background: var(--chip);
+}
+
+.hire__mark--upwork { background: #14a800; }
+.hire__mark--fiverr { background: #1dbf73; color: #07150d; }
+
+.hire__text { display: grid; gap: 2px; flex: 1; min-width: 0; }
+
+.hire__action {
+  font-weight: 600;
+  color: var(--heading);
+}
+
+.hire__sub {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.hire__arrow {
+  color: var(--muted);
+  transition: transform 0.4s var(--ease-out), color 0.4s var(--ease);
+}
+
+.hire__btn:hover .hire__arrow { transform: translate(2px, -2px); color: var(--heading); }
+
+/* ---------- inline variant (hero) ---------- */
+.hire-inline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  margin-top: 22px;
+  font-size: 0.86rem;
+  color: var(--muted);
+}
+
+.hire-inline__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  color: var(--heading);
+  transition: opacity 0.3s var(--ease);
+}
+
+.hire-inline__link:hover { opacity: 0.75; }
+
+.hire-inline .hire__mark {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  font-size: 0.62rem;
+}

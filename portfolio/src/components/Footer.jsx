@@ -1,43 +1,78 @@
-import { navLinks, social } from "../data/site";
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { visibleSections } from "../lib/sections";
+import { useContent } from "../context/content";
+import RichText from "./RichText";
+import HirePlatforms from "./HirePlatforms";
+import SocialLinks from "./SocialLinks";
 import "./Footer.css";
 
 export default function Footer() {
+  const content = useContent();
+  const { profile, settings } = content;
+  const pathname = usePathname();
+  const links = visibleSections(content);
+  const contactVisible = settings.sections.contact?.visible !== false;
+  // The home page ends with the contact section, so the call to action would repeat.
+  const showCta = contactVisible && pathname !== "/";
+
   return (
     <footer className="footer">
-      <div className="container footer__inner">
-        <div className="footer__brand">
-          <a href="#home" className="footer__logo">
-            Usman<span className="text-gradient">.</span>
-          </a>
-          <p className="footer__tagline">
-            Front-End Developer — React, Next.js &amp; TypeScript.
-            <br />
-            Building fast, accessible interfaces from Multan, Pakistan.
+      {showCta && (
+        <div className="container footer__cta">
+          <p className="footer__cta-label">
+            <span className={`pulse-dot ${profile.availability_open ? "" : "pulse-dot--off"}`} aria-hidden="true" />
+            {profile.availability_label || "Available for new projects"}
           </p>
+          <h2 className="footer__cta-title">
+            Have a project in mind? <span className="hl">Let&apos;s talk.</span>
+          </h2>
+          <Link href="/#contact" className="btn btn--primary">
+            Start a project
+            <span className="btn__arrow" aria-hidden="true">
+              →
+            </span>
+          </Link>
+          <HirePlatforms socials={profile.socials} variant="inline" label="or order on" />
+        </div>
+      )}
+
+      <div className="container footer__main">
+        <div className="footer__brand">
+          <Link href="/#home" className="footer__logo">
+            {profile.logo_text}
+            <span className="text-gradient">.</span>
+          </Link>
+          {settings.footer_tagline && (
+            <p className="footer__tagline">
+              <RichText text={settings.footer_tagline} />
+            </p>
+          )}
         </div>
 
-        <nav className="footer__nav" aria-label="Footer">
-          {navLinks.map((item) => (
-            <a key={item.id} href={`#${item.id}`}>
+        <nav className="footer__col" aria-label="Footer">
+          <p className="footer__heading">Explore</p>
+          {links.map((item) => (
+            <Link key={item.id} href={`/#${item.id}`}>
               {item.label}
-            </a>
+            </Link>
           ))}
+          <Link href="/projects">All projects</Link>
         </nav>
 
-        <div className="footer__socials">
-          <a href={`mailto:${social.email}`}>Email</a>
-          <a href={social.github} target="_blank" rel="noreferrer">
-            GitHub
-          </a>
-          <a href={social.linkedin} target="_blank" rel="noreferrer">
-            LinkedIn
-          </a>
+        <div className="footer__col">
+          <p className="footer__heading">Connect</p>
+          <SocialLinks email={profile.email} socials={profile.socials} className="footer__socials" />
         </div>
       </div>
 
       <div className="container footer__bottom">
-        <p>© {new Date().getFullYear()} Usman Qasim. All rights reserved.</p>
-        <p className="footer__built">Built with React &amp; Vite.</p>
+        <p>
+          © {new Date().getFullYear()} {profile.name}. All rights reserved.
+        </p>
+        {settings.footer_note && <p>{settings.footer_note}</p>}
       </div>
     </footer>
   );

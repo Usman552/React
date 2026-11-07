@@ -4,24 +4,33 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "test": "node --test \"tests/unit/**/*.test.mjs\"",
+    "test:integration": "node --env-file-if-exists=.env.scripts.local --env-file-if-exists=.env.local --test --test-concurrency=1 \"tests/integration/**/*.test.mjs\"",
+    "db:start": "supabase start",
+    "db:stop": "supabase stop",
+    "db:reset": "supabase db reset && npm run db:seed",
+    "db:seed": "node --env-file-if-exists=.env.scripts.local scripts/seed-content.mjs",
+    "admin:create": "node --env-file-if-exists=.env.scripts.local scripts/create-admin.mjs",
+    "functions:serve": "supabase functions serve --env-file supabase/functions/.env"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.118.0",
+    "next": "^16.4.3",
     "react": "^19.2.7",
-    "react-dom": "^19.2.7"
+    "react-dom": "^19.2.7",
+    "react-router": "^8.5.1"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^6.0.3",
     "eslint": "^10.6.0",
     "eslint-plugin-react-hooks": "^7.1.1",
-    "eslint-plugin-react-refresh": "^0.5.3",
     "globals": "^17.7.0",
-    "vite": "^8.1.1"
+    "supabase": "^2.122.0"
   }
 }

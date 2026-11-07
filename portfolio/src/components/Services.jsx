@@ -1,55 +1,50 @@
+"use client";
+
 import useScrollReveal from "../hooks/useScrollReveal";
-import { services } from "../data/skills";
+import { useContent } from "../context/content";
+import SectionHead from "./SectionHead";
 import "./Services.css";
 
-function ServiceCard({ service, index }) {
+function ServiceRow({ service, index }) {
   const ref = useScrollReveal();
 
   return (
-    <article
-      ref={ref}
-      className="service-card glass reveal"
-      style={{ transitionDelay: `${index * 0.08}s` }}
-    >
-      <span className="service-card__icon" aria-hidden="true">
+    <li ref={ref} className="service reveal" style={{ transitionDelay: `${index * 0.06}s` }}>
+      <span className="service__index">{String(index + 1).padStart(2, "0")}</span>
+
+      <div className="service__main">
+        <h3 className="service__title">{service.title}</h3>
+        {service.tags.length > 0 && (
+          <ul className="service__tags" aria-label="Technologies">
+            {service.tags.map((tag) => (
+              <li key={tag}>{tag}</li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      <p className="service__text">{service.description}</p>
+
+      <span className="service__icon" aria-hidden="true">
         {service.icon}
       </span>
-
-      <h3 className="service-card__title">{service.title}</h3>
-      <p className="service-card__text">{service.text}</p>
-
-      <div className="service-card__tags">
-        {service.tags.map((tag) => (
-          <span key={tag} className="pill">
-            {tag}
-          </span>
-        ))}
-      </div>
-    </article>
+    </li>
   );
 }
 
-export default function Services() {
+export default function Services({ index }) {
+  const { services, settings } = useContent();
+
   return (
     <section id="services" className="section services">
       <div className="container">
-        <div className="section__head">
-          <p className="section-label">What I Do</p>
-          <h2 className="section__title">
-            Services built around a{" "}
-            <span className="text-gradient">modern front-end stack</span>.
-          </h2>
-          <p className="section__lead">
-            From a Figma file to a deployed, authenticated, API-connected app —
-            here is where I add the most value.
-          </p>
-        </div>
+        <SectionHead section={settings.sections.services} index={index} split />
 
-        <div className="services__grid">
+        <ol className="services__list">
           {services.map((service, i) => (
-            <ServiceCard key={service.title} service={service} index={i} />
+            <ServiceRow key={service.id} service={service} index={i} />
           ))}
-        </div>
+        </ol>
       </div>
     </section>
   );

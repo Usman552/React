@@ -1,0 +1,53 @@
+name: Portfolio CI
+
+# Vercel builds and deploys the site itself (Git integration). This workflow
+# only guards quality: lint, unit tests and a production build on every PR
+# and push that touches the portfolio.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'portfolio/**'
+      - '.github/workflows/portfolio-ci.yml'
+  pull_request:
+    paths:
+      - 'portfolio/**'
+      - '.github/workflows/portfolio-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Lint, test and build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: portfolio
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: portfolio/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Unit tests
+        run: npm test
+
+      # Without Supabase variables the build uses src/data/defaults.js,
+      # which is enough to prove the site compiles.
+      - name: Build
+        run: npm run build

@@ -1,114 +1,137 @@
+"use client";
+
 import useTypewriter from "../hooks/useTypewriter";
-import { resumeUrl } from "../data/site";
+import { useContent } from "../context/content";
+import HirePlatforms from "./HirePlatforms";
+import RichText from "./RichText";
+import { isExternal, safeUrl } from "../lib/url";
 import "./Hero.css";
 
-const stack = [
-  "React",
-  "Next.js",
-  "TypeScript",
-  "Redux Toolkit",
-  "Firebase Auth",
-  "REST APIs",
-  "Tailwind CSS",
-  "Laravel",
-  "MySQL",
-  "Git",
-];
+function CtaLink({ cta, primary }) {
+  const href = safeUrl(cta?.href);
+  if (!href || !cta.label) return null;
+  const external = isExternal(href);
+  return (
+    <a
+      href={href}
+      className={`btn ${primary ? "btn--primary" : "btn--ghost"}`}
+      {...(external ? { target: "_blank", rel: "noreferrer" } : {})}
+    >
+      {cta.label}
+      {primary && (
+        <span className="btn__arrow" aria-hidden="true">
+          →
+        </span>
+      )}
+    </a>
+  );
+}
 
-const roles = [
-  "React Developer",
-  "Next.js Developer",
-  "TypeScript Engineer",
-  "API Integration Specialist",
-];
+const FALLBACK_ROLES = ["Developer"];
 
 export default function Hero() {
+  const { profile } = useContent();
+  const roles = profile.roles.length ? profile.roles : FALLBACK_ROLES;
   const role = useTypewriter(roles);
+  const resume = profile.show_resume ? safeUrl(profile.resume_url) : null;
+  const photo = safeUrl(profile.photo_url);
 
   return (
     <section id="home" className="hero">
-      <div className="container hero__inner">
-        <div className="hero__text">
-          <span className="hero__badge glass">
-            <span className="hero__dot"></span>
-            Available for freelance &amp; full-time work
-          </span>
+      <div className="container hero__grid">
+        <div className="hero__copy">
+          <div className="hero__meta">
+            {profile.hero_badge && (
+              <span className="hero__status">
+                <span className={`pulse-dot ${profile.availability_open ? "" : "pulse-dot--off"}`} aria-hidden="true" />
+                {profile.hero_badge}
+              </span>
+            )}
+            {profile.location && <span className="hero__location">{profile.location}</span>}
+          </div>
 
           <h1 className="hero__title">
-            Hi, I&apos;m Usman Qasim —<br />I build{" "}
-            <span className="text-gradient">fast, modern</span> web apps.
+            <RichText text={profile.hero_heading} />
           </h1>
 
-          <p className="hero__role" aria-label={roles.join(", ")}>
-            <span className="hero__role-prefix">&gt;</span>
-            <span className="hero__role-text">{role}</span>
-            <span className="hero__caret" aria-hidden="true"></span>
-          </p>
-
-          <p className="hero__subtitle">
-            Front-End Developer from Multan, Pakistan. I turn designs into
-            production-ready React and Next.js interfaces — typed with
-            TypeScript, wired to real REST APIs, secured with Firebase
-            Authentication, and responsive on every screen.
-          </p>
+          <div className="hero__intro">
+            <p className="hero__role" aria-label={roles.join(", ")}>
+              <span className="hero__role-prefix" aria-hidden="true">
+                ↳
+              </span>
+              <span className="hero__role-text">{role}</span>
+              <span className="hero__caret" aria-hidden="true"></span>
+            </p>
+            {profile.hero_subtitle && <p className="hero__subtitle">{profile.hero_subtitle}</p>}
+          </div>
 
           <div className="hero__actions">
-            <a href="#projects" className="btn btn--primary">
-              View Projects
-            </a>
-            <a href="#contact" className="btn btn--ghost">
-              Get in Touch
-            </a>
-            <a
-              href={resumeUrl}
-              className="btn btn--ghost"
-              target="_blank"
-              rel="noreferrer"
-              type="application/pdf"
-            >
-              View Resume
-              <span aria-hidden="true">↗</span>
-            </a>
+            <CtaLink cta={profile.cta_primary} primary />
+            <CtaLink cta={profile.cta_secondary} />
+            {resume && (
+              <a href={resume} className="link-underline hero__resume" target="_blank" rel="noreferrer">
+                Résumé <span aria-hidden="true">↗</span>
+              </a>
+            )}
           </div>
 
-          <ul className="hero__quickfacts">
-            <li>
-              <strong>10+</strong>
-              <span>Projects shipped</span>
-            </li>
-            <li>
-              <strong>100%</strong>
-              <span>Responsive builds</span>
-            </li>
-            <li>
-              <strong>&lt; 24h</strong>
-              <span>Reply time</span>
-            </li>
+          <HirePlatforms socials={profile.socials} variant="inline" label="Also hire me on" />
+        </div>
+
+        <div className="hero__portrait">
+          <div className="portrait">
+            <div className="portrait__frame">
+              {photo && (
+                <img
+                  src={photo}
+                  alt={profile.name}
+                  width="480"
+                  height="600"
+                  fetchPriority="high"
+                  decoding="async"
+                />
+              )}
+            </div>
+
+            <div className="portrait__card">
+              <span className="portrait__name">{profile.name}</span>
+              {profile.title && <span className="portrait__title">{profile.title}</span>}
+            </div>
+
+            {profile.hero_tags.slice(0, 4).map((tag, i) => (
+              <span key={tag} className={`portrait__tag portrait__tag--${i + 1}`}>
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {profile.quick_facts.length > 0 && (
+        <div className="container">
+          <ul className="hero__facts">
+            {profile.quick_facts.map((fact) => (
+              <li key={`${fact.value}-${fact.label}`}>
+                <strong>{fact.value}</strong>
+                <span>{fact.label}</span>
+              </li>
+            ))}
           </ul>
         </div>
+      )}
 
-        <div className="hero__visual">
-          <div className="hero__ring"></div>
-          <div className="hero__photo glass">
-            <img src="/profile.png" alt="Usman Qasim" width="360" height="360" />
+      {profile.hero_stack.length > 0 && (
+        <div className="hero__marquee" aria-hidden="true">
+          <div className="hero__marquee-track">
+            {[...profile.hero_stack, ...profile.hero_stack].map((item, i) => (
+              <span key={i} className="hero__marquee-item">
+                {item}
+                <span className="hero__marquee-star">✦</span>
+              </span>
+            ))}
           </div>
-
-          <span className="hero__float hero__float--1 glass">React</span>
-          <span className="hero__float hero__float--2 glass">Next.js</span>
-          <span className="hero__float hero__float--3 glass">TypeScript</span>
-          <span className="hero__float hero__float--4 glass">Firebase</span>
         </div>
-      </div>
-
-      <div className="hero__marquee" aria-hidden="true">
-        <div className="hero__marquee-track">
-          {[...stack, ...stack].map((item, i) => (
-            <span key={i} className="hero__marquee-item">
-              {item}
-            </span>
-          ))}
-        </div>
-      </div>
+      )}
     </section>
   );
 }

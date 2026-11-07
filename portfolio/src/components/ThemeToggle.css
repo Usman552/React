@@ -34,7 +34,7 @@
   color: #08111f;
   transform: translateX(0);
   transition: transform 0.35s var(--ease);
-  box-shadow: 0 4px 12px -4px rgba(124, 92, 255, 0.8);
+  box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--violet) 80%, transparent);
 }
 
 :root[data-theme="light"] .theme-toggle__thumb {
